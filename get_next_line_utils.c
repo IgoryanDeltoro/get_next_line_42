@@ -10,16 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <string.h>
-
-size_t	ft_strlcat(char *dst, const char *src, size_t size);
-size_t	ft_strlcpy(char *dst, const char *src, size_t size);
-char	*ft_strdup(const char *s);
-char	*ft_strjoin(char const *s1, char const *s2);
-size_t	ft_strlen(const char *s);
-char	*ft_strchr(const char *s, int c);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
+#include "get_next_line.h"
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
@@ -72,7 +63,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	int		s2_len;
 	int		total_len;
 
-	if (!s1 && !s2)
+	if (!s1 || !s2)
 		return (0);
 	s1_len = ft_strlen(s1) + 1;
 	s2_len = ft_strlen(s2);
