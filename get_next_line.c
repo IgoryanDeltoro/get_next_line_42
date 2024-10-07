@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibondarc <ibondarc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igoryan <igoryan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 14:24:26 by ibondarc          #+#    #+#             */
-/*   Updated: 2024/09/27 15:30:06 by ibondarc         ###   ########.fr       */
+/*   Updated: 2024/10/07 23:01:19 by igoryan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 //static char    *_fill_line_buffer(int fd, char *left_c, char *buffer);
 //static char    *_set_line(char *line);
-//char	*ft_strchr(const char *s, int c);
 
 char    *get_next_line(int fd)
 {
@@ -37,7 +36,7 @@ char    *get_next_line(int fd)
 	if (!buffer)
 		return (NULL);
 	byte_read = 1;
-	while (byte_read < 0)
+	while (byte_read > 0)
 	{
 		byte_read = read(fd, buffer, BUFFER_SIZE);
 		if (byte_read == -1)
@@ -48,31 +47,29 @@ char    *get_next_line(int fd)
 		if (byte_read == 0)
 			break ;
 		buffer[byte_read] = '\0';
-		printf("%s", buffer);
 		if (!total_str)
 			total_str = ft_strdup("");
 		temp = total_str;
-		printf("total_str: %s\n",total_str);
-		printf("buffer: %s", buffer);
 		total_str = ft_strjoin(temp, buffer);
 		free(temp);
-		printf("%ld", byte_read);
 		if (ft_strchr(buffer, '\n'))
 			break ;
 	}
 	free(buffer);
 	buffer = NULL;
-	printf("%s", total_str);
 	line = total_str;
+	if (!line)
+		return (NULL);
+	i = 0;
 	while (total_str[i] != '\0' && total_str[i] != '\n')
-		i++;
+		i++;		
 	if (total_str[i] == '\0' || total_str[1] == '\0' )
 	{	
 		total_str = NULL;
 	}
 	else
 	{
-		total_str = ft_substr(total_str, i + 1, ft_strlen(total_str) - i);
+		total_str = ft_substr(line, i + 1, ft_strlen(line) - i);
 		if (total_str[0] == 0)
 		{
 			free(total_str);
@@ -83,25 +80,4 @@ char    *get_next_line(int fd)
 	return line;
 }
 
-/*
-static char *_set_line(char *line_buffer)
-{
-    char    *left_c;
-    ssize_t    i;
-    
-    i = 0;
-    
 
-}
-
-static char	*_fill_line_buffer(int fd, char *
-	ssize_t	b_read;
-	char	*tmp;
-
-		left_c = ft_strjoin(tmp, buffer);
-		free(tmp);
-		tmp = NULL;
-		if (ft_strchr(buffer, '\n'))
-			break ;
-	    return (left_c);
-}*/
