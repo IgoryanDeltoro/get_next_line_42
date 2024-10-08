@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igoryan <igoryan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ibondarc <ibondarc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 22:36:06 by igoryan           #+#    #+#             */
-/*   Updated: 2024/10/07 23:02:21 by igoryan          ###   ########.fr       */
+/*   Updated: 2024/10/08 10:55:48 by ibondarc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,24 @@ int main(void)
     }
     line = get_next_line(fd);
     printf("\n%s ", line);
-    line = get_next_line(fd);
-    printf("%s ", line);
-    line = get_next_line(fd);
-    printf("%s ", line);
-    line = get_next_line(fd);
-    printf("%s \n", line);
-    line = get_next_line(fd);
-    printf("%s \n", line);
-    
     free(line);
+
+    line = get_next_line(fd);
+    printf("%s ", line);
+    free(line);
+
+    line = get_next_line(fd);
+    printf("%s ", line);
+    free(line);
+
+    line = get_next_line(fd);
+    printf("%s \n", line);
+    free(line);
+
+    line = get_next_line(fd);
+    printf("%s \n", line);
+    free(line);
+    
     close(fd);
     return (0);
 }

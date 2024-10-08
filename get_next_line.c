@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igoryan <igoryan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ibondarc <ibondarc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 14:24:26 by ibondarc          #+#    #+#             */
-/*   Updated: 2024/10/07 23:01:19 by igoryan          ###   ########.fr       */
+/*   Updated: 2024/10/08 12:00:42 by ibondarc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-//static char    *_fill_line_buffer(int fd, char *left_c, char *buffer);
+// static char    *_fill_line_buffer(int fd, char *left_c, char *buffer);
 //static char    *_set_line(char *line);
 
 char    *get_next_line(int fd)
@@ -24,15 +24,13 @@ char    *get_next_line(int fd)
 	ssize_t		byte_read;
 	int		i;
 
-	buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd,  0, 0) < 0)
 	{
 		free(total_str);
-		free(buffer);
 		total_str = NULL;
-		buffer = NULL;
 		return (NULL);
 	}
+	buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buffer)
 		return (NULL);
 	byte_read = 1;
@@ -52,6 +50,7 @@ char    *get_next_line(int fd)
 		temp = total_str;
 		total_str = ft_strjoin(temp, buffer);
 		free(temp);
+		temp = NULL;	
 		if (ft_strchr(buffer, '\n'))
 			break ;
 	}
@@ -63,7 +62,7 @@ char    *get_next_line(int fd)
 	i = 0;
 	while (total_str[i] != '\0' && total_str[i] != '\n')
 		i++;		
-	if (total_str[i] == '\0' || total_str[1] == '\0' )
+	if (total_str[i] == '\0')
 	{	
 		total_str = NULL;
 	}
@@ -79,5 +78,6 @@ char    *get_next_line(int fd)
 	}
 	return line;
 }
+
 
 
