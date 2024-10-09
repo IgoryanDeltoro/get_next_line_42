@@ -6,78 +6,102 @@
 /*   By: ibondarc <ibondarc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 14:24:26 by ibondarc          #+#    #+#             */
-/*   Updated: 2024/10/08 12:00:42 by ibondarc         ###   ########.fr       */
+/*   Updated: 2024/10/09 13:28:18 by ibondarc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-// static char    *_fill_line_buffer(int fd, char *left_c, char *buffer);
-//static char    *_set_line(char *line);
+static char	*fill_buf_by_line(int fd, char *total_str, char *buffer);
+static char	*extract_line(char *line_buffer);
+static char	*allocate_buffer(size_t size);
 
-char    *get_next_line(int fd)
+char	*get_next_line(int fd)
 {
 	static char	*total_str;
 	char		*line;
 	char		*buffer;
-	char		*temp;
-	ssize_t		byte_read;
-	int		i;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd,  0, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 	{
 		free(total_str);
 		total_str = NULL;
 		return (NULL);
 	}
-	buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
-	if (!buffer)
+	buffer = allocate_buffer(BUFFER_SIZE);
+	line = fill_buf_by_line(fd, total_str, buffer);
+	free(buffer);
+	buffer = NULL;
+	if (!line)
 		return (NULL);
-	byte_read = 1;
-	while (byte_read > 0)
+	total_str = extract_line(line);
+	return (line);
+}
+
+static char	*fill_buf_by_line(int fd, char *total_str, char *buffer)
+{
+	ssize_t	buf_read;
+	char	*temp;
+
+	buf_read = 1;
+	while (buf_read > 0)
 	{
-		byte_read = read(fd, buffer, BUFFER_SIZE);
-		if (byte_read == -1)
+		buf_read = read(fd, buffer, BUFFER_SIZE);
+		if (buf_read == -1)
 		{
-			free(buffer);
-			buffer = NULL;
+			free(total_str);
+			total_str = NULL;
+			return (NULL);
 		}
-		if (byte_read == 0)
+		if (buf_read == 0)
 			break ;
-		buffer[byte_read] = '\0';
+		buffer[buf_read] = '\0';
 		if (!total_str)
 			total_str = ft_strdup("");
 		temp = total_str;
 		total_str = ft_strjoin(temp, buffer);
 		free(temp);
-		temp = NULL;	
 		if (ft_strchr(buffer, '\n'))
 			break ;
 	}
-	free(buffer);
-	buffer = NULL;
-	line = total_str;
-	if (!line)
-		return (NULL);
-	i = 0;
-	while (total_str[i] != '\0' && total_str[i] != '\n')
-		i++;		
-	if (total_str[i] == '\0')
-	{	
-		total_str = NULL;
-	}
-	else
-	{
-		total_str = ft_substr(line, i + 1, ft_strlen(line) - i);
-		if (total_str[0] == 0)
-		{
-			free(total_str);
-			total_str = NULL;
-		}
-		line[i + 1] = '\0';
-	}
-	return line;
+	return (total_str);
 }
 
+static char	*extract_line(char *total_str)
+{
+	char	*line;
+	ssize_t	i;
+	size_t	j;
 
+	i = 0;
+	while (total_str[i] != '\n' && total_str[i] != '\0')
+		i++;
+	if (total_str[i] == '\0')
+		return (NULL);
+	j = 0;
+	line = allocate_buffer(ft_strlen(total_str) - i);
+	if (!line)
+		return (NULL);
+	while (j < (ft_strlen(total_str) - i))
+	{
+		line[j] = total_str[i + j + 1];
+		j++;
+	}
+	if (*line == 0)
+	{
+		free(line);
+		line = NULL;
+	}
+	total_str[i + 1] = '\0';
+	return (line);
+}
 
+static char	*allocate_buffer(size_t size)
+{
+	char	*buffer;
+	
+	buffer = (char *)malloc((size + 1) * sizeof(char));
+	if (!buffer)
+		return (NULL);
+	return (buffer);
+}
