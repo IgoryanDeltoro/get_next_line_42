@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibondarc <ibondarc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igoryan <igoryan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:17:00 by ibondarc          #+#    #+#             */
-/*   Updated: 2024/10/08 16:02:36 by ibondarc         ###   ########.fr       */
+/*   Updated: 2024/10/18 22:30:52 by igoryan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	size_t	total_len;
 
 	if (!s1 || !s2)
-		return (0);
+		return (NULL);
 	s1_len = ft_strlen(s1);
 	s2_len = ft_strlen(s2);
 	total_len = s1_len + s2_len;
@@ -47,7 +47,7 @@ char	*ft_strdup(char *s)
 	if (!s)
 		return (NULL);
 	s_len = ft_strlen(s);
-	result = malloc(sizeof(char) * (s_len + 1));
+	result = (char *)malloc(sizeof(char) * (s_len + 1));
 	if (!result)
 		return (NULL);
 	result[s_len] = '\0';
